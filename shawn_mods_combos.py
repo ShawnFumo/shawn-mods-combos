@@ -1,6 +1,7 @@
 # Josh's combos - in Python (via Shawn)
 import re
 from functools import reduce
+from plover import log
 
 LONGEST_KEY = 1
 
@@ -53,22 +54,51 @@ navsMap = {
     "FR": "escape",
     "LG": "tab",
 
-    "RB": "return"
-    
+    "RB": "return",
+}
+
+symbolsMap = {
+    "RP": "/",
+    "FB": "\\",
+    "BL": "'",
+    "PG": "`",
+    "BG": "-",
+    "PL": "=",
+    "RPL": "[",
+    "FBG": "]",
+    # todo: period, comma
+}
+
+symbolsMap2 = {
+    "RP": "slash",
+    "FB": "backslace",
+    "BL": "apostrophe",
+    "PG": "grave",
+    "BG": "minus",
+    "PL": "equal",
+    "RPL": "bracketleft",
+    "FBG": "bracketright",
 }
 
 leftModsMap = {
     "S": "super",
     "T": "alt",
+    "K": "alt",
     "P": "control",
-    "H": "shift"
+    "W": "control",
+    "H": "shift",
+    "R": "shift",
 }
 
 rightModsMap = {
     "T": "super",
+    "S": "super",
     "L": "alt",
+    "G": "alt",
     "P": "control",
-    "F": "shift"
+    "B": "control",
+    "F": "shift",
+    "R": "shift",
 }
 
 numsBase = {
@@ -85,6 +115,7 @@ numsBase = {
 
 numsMap = {**numsBase, **{
     "RB": "0",
+    "T": "0"
 }}
 
 funcsMap = {**numsBase, **{
@@ -96,6 +127,8 @@ funcsMap = {**numsBase, **{
 def lookup(chord):
     # extract the chord for easy use
     stroke = chord[0]
+    log.info("--- new stroke ---")
+    log.info(stroke)
     # return stroke
 
     # quick tests to avoid regex if non-relevant stroke is sent
@@ -109,6 +142,11 @@ def lookup(chord):
     navResult = handleNav(stroke)
     if navResult is not None:
         return navResult
+
+    symResult = handleSymbols(stroke)
+    if symResult is not None:
+        log.info("symResult: " + symResult)
+        return symResult
 
     shortcutResult = handleShortcut(stroke)
     if shortcutResult is not None:
@@ -127,7 +165,8 @@ def lookup(chord):
     
 
 def handleNav(stroke):
-    navMatch = re.fullmatch(r'\+([STPH]*)-(.*)', stroke)
+    log.info("in handleNav")
+    navMatch = re.fullmatch(r'\+([STKPWHR]*)-(.*)', stroke)
 
     if navMatch is None:
         return None
@@ -135,17 +174,43 @@ def handleNav(stroke):
     (mods, rest) = navMatch.groups()
 
     if not mods and not rest:
-        raise KeyError
+        return None
 
     if rest and rest not in navsMap:
-        raise KeyError
+        return None
 
+    log.info("found nav match")
     modded = addMods(mods, leftModsMap, navsMap.get(rest, ""))
     # return modded
     return "{#" + modded + "}"
 
+def handleSymbols(stroke):
+    log.info("in handleSymbols")
+    match = re.fullmatch(r'\+([STKPWHR]*)-?([EU]*)(.*)', stroke)
+
+    if match is None:
+        return None
+
+    (mods, spacing, rest) = match.groups()
+
+    if not mods and not rest:
+        raise KeyError
+
+    if rest and rest not in symbolsMap:
+        raise KeyError
+
+    if mods:
+        value = symbolsMap2.get(rest, "")
+        modded = addMods(mods, leftModsMap, value)
+        return "{#" + modded + "}"
+    else:
+        value = symbolsMap.get(rest, "")
+        spaced = addSpacing2(spacing, value)
+        return "{^" + spaced + "^}"
+    
+
 def handleShortcut(stroke):
-    match = re.fullmatch(r'!(.*?)-?([FPLT]+)', stroke)
+    match = re.fullmatch(r'!(.*?)-?([FRPBLGTS]+)', stroke)
 
     if match is None:
         return None
@@ -159,7 +224,7 @@ def handleShortcut(stroke):
     return "{#" + modded + "}"
 
 def handleNums(stroke):
-    match = re.fullmatch(r'\+([STPH]*)A([EU]*)(.*)', stroke)
+    match = re.fullmatch(r'\+([STKPWHR]*)A([EU]*)(.*)', stroke)
 
     if match is None:
         return None
@@ -174,7 +239,7 @@ def handleNums(stroke):
     return "{#" + modded + "}"
 
 def handleFuncs(stroke):
-    match = re.fullmatch(r'\+([STPH]*)O(.*)', stroke)
+    match = re.fullmatch(r'\+([STKPWHR]*)O(.*)', stroke)
 
     if match is None:
         return None
@@ -187,7 +252,6 @@ def handleFuncs(stroke):
     modded = addMods(mods, leftModsMap, "F" + funcsMap.get(rest, ""))
     return "{#" + modded + "}"
 
-
     return stroke
 
 def addMods(mods, map, text):
@@ -198,4 +262,9 @@ def addMods(mods, map, text):
 def addSpacing(spacing, text):
     before = "space " if "E" in spacing else ""
     after = " space" if "U" in spacing else ""
+    return before + text + after
+
+def addSpacing2(spacing, text):
+    before = " " if "E" in spacing else ""
+    after = " " if "U" in spacing else ""
     return before + text + after
