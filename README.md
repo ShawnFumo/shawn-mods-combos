@@ -8,15 +8,12 @@ I wanted something that:
 * Is reliable to stroke
 * Isn't too hard on the weaker fingers
 * Takes advantage of the layout of popular hobbyist boards
-  * EcoSteno
-  * Uni
+  * [EcoSteno](https://nolltronics.com/product/ecosteno/?v=7516fd43adaa) - Split # bar
+  * [Uni](https://stenokeyboards.com/products/the-uni) - # key for each thumb
 * Doesn't need firmware modifications
 * Has some control over spacing of output
-* Compatible with Plover and Phoenix theory
+* Compatible with [Plover theory](https://github.com/openstenoproject/plover/wiki/Learning-Stenography) and [Phoenix theory](https://www.chicorymeadow.com/)
 * Uses undoable inputs when possible
-* Todo: Plover's lookup window support
-* Todo: Optional modal mode
-* Todo: Make installable through plugin manager?
 
 ## Basic Concepts
 
@@ -46,7 +43,7 @@ If using a thumb # key, it may be more comfortable to reach the modifiers on the
 |CTRL    |`P` or `W`|`-P` or `-B`|
 |SHIFT   |`H` or `R`|`-F` or `-R`|
 
-__Note:__ You can use a modifier my itself from either side. For instance, to bring up the start menu on Windows, you could use `L#S` or `R#-T` or `R#-S` to press the GUI/Windows button.
+> __Note:__ You can use a modifier my itself from either side. For instance, to bring up the start menu on Windows, you could use `L#S` or `R#-T` or `R#-S` to press the GUI/Windows button.
 
 ## Spacing
 By default, all symbols and numbers will suppress any spacing (like outputting an equal sign on the nav/symbols mode would output `{^=^}`). Using the right vowels will force a space on that side.
@@ -60,7 +57,7 @@ By default, all symbols and numbers will suppress any spacing (like outputting a
 
 This works with modifiers and even navigation keys as well. Spacing makes the most sense with shifted symbols, but otherwise it will still happen in order. `EU` with control-left would output a space, do control-left, and output another space.
 
-__Note:__ In any mode using `L#`, pressing any of the right vowels and no right-side consonants will output a single space. This lets you add a space without outputting any symbols, but more importantly lets you use modifiers to do things like ctrl-space.
+> __Note:__ In any mode using `L#`, pressing any of the right vowels and no right-side consonants will output a single space. This lets you add a space without outputting any symbols, but more importantly lets you use modifiers to do things like ctrl-space.
 
 ## Navigation and Symbols
 
@@ -116,6 +113,18 @@ There is two ways to access function keys. With a top # bar, you can use `L#O`. 
 
 It is laid out the same as the number pad but also uses the fourth row to give `F10` through `F12` via `-S`, `-TS`, and `-T`.
 
+## Fingerspelling Shortcuts
+To do shortcuts involving letter keys, you can use `R#`, the modifiers on the right side, and then normal finger spelling using the left consonants and vowels (see the note about variations when using thumb # keys).
+
+These are the standard fingerspelling combos like `KR` for `c` and `SKWR` for `j`. For `z`, you can use either Plover's `STKPW` or Phoenix's `SWR`. `i` can be Plover's `EU` or Pheonix's `AOEU`.
+
+> __Note:__ When using a thumb cluster # key like on the Uni, you probably can't easily press `E` or `EU` with `R#`. You can use these variations to help: `AU` for `e` and `AOU` for `i`.
+
+You can also use this as an alternative way to do finger spelling by using no modifiers for lowercase letters and `-P` or `-R` to shift to capitals. You could free up your normal fingerspelling strokes for something else if you wanted.
+
+You can't add spacing via `EU` due to being needed for fingerspelling vowels, but remember you can use `L#` and any right vowel to quickly add a space (or your theory's normal space stroke).
+
+
 ## Examples
 |Stroke|Output|Notes
 |---|---|---
@@ -161,3 +170,11 @@ Set `#1` to `+-` and `#2` to `!-`
 * [Josh Combos](https://github.com/JoshuaGrams/single-stroke-modifiers) - The main influence. I like the layout of the combos for nav and symbols a lot. But wanted to avoid the starters and enders.
 * [Miryoku](https://github.com/manna-harbour/miryoku) - Took the idea of how the modifiers are laid out. It also has a similar approach to the numpad and func keys.
 * [Emily's Modifiers](https://github.com/EPLHREU/emily-modifiers) & [Emily's Symbols](https://github.com/EPLHREU/emily-symbols) - The idea of how spacing can be controlled via vowel keys. Also looked at the code of Modfiers to see how to do a python dict.
+
+
+### Todo
+
+* Plover lookup window support
+* Optional modal mode
+* Make installable through plugin manager?
+* Mouse support?
