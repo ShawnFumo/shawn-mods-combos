@@ -119,12 +119,12 @@ It is laid out the same as the number pad but also uses the fourth row to give `
 ## Examples
 |Stroke|Output|Notes
 |---|---|---
-L#P|Up|simple navigation
-L#AEUL|⎵9⎵|number w/ leading & ending space
-L#REPL|⎵+|shifted symbol w/ leading space
-R#KR-B|Ctrl-C|Shortcut w/ modifier
-L#PAOPB|Ctrl-F5|Func key w/ modifier
-L#AGZ|F3|Func key using num pad + Z (for thumb # users or preference)
+`L#P`|`Up`|simple navigation
+`L#AEUL`|`⎵9⎵`|number w/ leading & ending space
+`L#REPL`|`⎵+`|shifted symbol w/ leading space
+`R#KR-B`|`Ctrl-C`|Shortcut w/ modifier
+`L#PAOPB`|`Ctrl-F5`|Func key w/ modifier
+`L#AGZ`|`F3`|Func key using num pad + `-Z` (for thumb # users or preference)
 
 ## Installation
 You need to install [Python Dictionary support](https://github.com/benoit-pierre/plover_python_dictionary) to use this dictionary.
