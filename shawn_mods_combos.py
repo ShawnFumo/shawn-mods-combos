@@ -49,6 +49,7 @@ navsMap = {
 
     "F": {"command": "backspace"},
     "L": {"command": "delete"},
+    "PBS": {"command": "insert"},
 
     "RPG": {"command": "page_up"},
     "FBL": {"command": "page_down"},
@@ -78,6 +79,8 @@ navsMap = {
 
     "RPL": {"text": "[", "command": "bracketleft"},
     "FBG": {"text": "]", "command": "bracketright"},
+
+    "PS": {"command": "print"},
 }
 
 leftModsMap = {
@@ -142,6 +145,14 @@ def lookup(chord):
     if not nums:
         raise KeyError
 
+    # Press a modifier by itself on either side
+    if nums == "+" and leftC and not leftV and not rightV and not rightC:
+        log.debug("single modifier left side")
+        return handleJustMods(leftC, leftModsMap)
+    if nums == "!" and rightC and not leftV and not rightV and not leftC:
+        log.debug("single modifier right side")
+        return handleJustMods(rightC, rightModsMap)
+
     if nums == "+" and rightV and not rightC:
         log.debug("single space special case")
         return handleSingleSpace(leftC)
@@ -187,6 +198,9 @@ def handleSingleSpace(modifiers):
         return addMods(modifiers, leftModsMap, spaceVal)
     else:
         return "{^ ^}"
+
+def handleJustMods(modifiers, map):
+    return addMods(modifiers, map, {"command": ""})
 
 def handleNav(modifiers, spacing, rest):
     log.debug("in handleNav")
