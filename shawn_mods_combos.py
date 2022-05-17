@@ -1,11 +1,14 @@
-# Josh's combos - in Python (via Shawn)
+# Shawn's Mods & Combos
+# https://github.com/ShawnFumo/shawn-mods-combos
 import re
 from functools import reduce
 from plover import log
+import json
+
+# This is global, so restart Plover or set back to "INFO" to get back to normal logging
+# log.set_level("DEBUG")
 
 LONGEST_KEY = 1
-
-
 
 spellingMap = {
     "A"     : "a",
@@ -13,10 +16,12 @@ spellingMap = {
     "KR"    : "c",
     "TK"    : "d",
     "E"     : "e",
+    "AU"    : "e", # for thumb cluster # keys on outside
     "TP"    : "f",
     "TKPW"  : "g",
     "H"     : "h",
     "AOEU"  : "i",
+    "AOU"   : "i", # for thumb cluster # keys on outside
     "SKWR"  : "j",
     "K"     : "k",
     "HR"    : "l",
@@ -37,47 +42,42 @@ spellingMap = {
 }
 
 navsMap = {
-    "R": "left",
-    "P": "up",
-    "B": "down",
-    "G": "right",
+    "R": {"command": "left"},
+    "P": {"command": "up"},
+    "B": {"command": "down"},
+    "G": {"command": "right"},
 
-    "F": "backspace",
-    "L": "delete",
+    "F": {"command": "backspace"},
+    "L": {"command": "delete"},
 
-    "RPG": "page_up",
-    "FBL": "page_down",
+    "RPG": {"command": "page_up"},
+    "FBL": {"command": "page_down"},
 
-    "FPL": "home",
-    "RBG": "end",
+    "FPL": {"command": "home"},
+    "RBG": {"command": "end"},
 
-    "FR": "escape",
-    "LG": "tab",
+    "FR": {"command": "escape"},
+    "LG": {"command": "tab", "text": "\t"},
 
-    "RB": "return",
-}
+    "RB": {"command": "return", "text": "\n"}, # Does Plover care about \n vs \r?
 
-symbolsMap = {
-    "RP": "/",
-    "FB": "\\",
-    "BL": "'",
-    "PG": "`",
-    "BG": "-",
-    "PL": "=",
-    "RPL": "[",
-    "FBG": "]",
-    # todo: period, comma
-}
+    "RP": {"text": "/", "command": "slash"},
+    # Spaces around \ needed for escaping problem with that and {^}. They aren't printed.
+    "FB": {"text": " \\ ", "command": "backslash"},
 
-symbolsMap2 = {
-    "RP": "slash",
-    "FB": "backslace",
-    "BL": "apostrophe",
-    "PG": "grave",
-    "BG": "minus",
-    "PL": "equal",
-    "RPL": "bracketleft",
-    "FBG": "bracketright",
+    "RBGS": {"text": ",", "command": "comma"},
+    "FPLT": {"text": ".", "command": "period"},
+
+    "BL": {"text": "'", "command": "apostrophe"},
+    "PG": {"text": "`", "command": "grave"},
+
+    "PB": {"text": ";", "command": "semicolon"},
+
+    "BG": {"text": "-", "command": "minus"},
+    "PL": {"text": "=", "command": "equal"},
+
+    "RPL": {"text": "[", "command": "bracketleft"},
+    "FBG": {"text": "]", "command": "bracketright"},
 }
 
 leftModsMap = {
@@ -127,144 +127,143 @@ funcsMap = {**numsBase, **{
 def lookup(chord):
     # extract the chord for easy use
     stroke = chord[0]
-    log.info("--- new stroke ---")
-    log.info(stroke)
-    # return stroke
+    log.debug("--- new stroke ---")
+    log.debug(stroke)
 
     # quick tests to avoid regex if non-relevant stroke is sent
     if len(chord) != 1:
         raise KeyError
     assert len(chord) <= LONGEST_KEY
 
-    # if stroke is "+-" or "!-":
-    #     return "{*+}"
+    (nums, leftC, leftV, rightV, rightC) = parseStroke(stroke)
+    log.debug("Parsed: (" + nums + ") (" + leftC + ") (" + leftV + ") (" + rightV + ") (" + rightC + ")")
+ 
+    # The system relies on at least one num key being pressed
+    if not nums:
+        raise KeyError
 
-    navResult = handleNav(stroke)
-    if navResult is not None:
-        return navResult
+    if nums == "+" and rightV and not rightC:
+        log.debug("single space special case")
+        return handleSingleSpace(leftC)
 
-    symResult = handleSymbols(stroke)
-    if symResult is not None:
-        log.info("symResult: " + symResult)
-        return symResult
+    if nums == "+" and leftV == "A":
+        # For thumb cluster #s on outside, where it is hard to hit #O or #AO
+        if "Z" in rightC or "D" in rightC:
+            log.debug("funcs layer via num + D or Z")
+            return handleFuncs(leftC, rightV, rightC.replace("D", "").replace("Z", ""))
+        else:
+            log.debug("nums layer")
+            return handleNums(leftC, rightV, rightC)
 
-    shortcutResult = handleShortcut(stroke)
-    if shortcutResult is not None:
-        return shortcutResult
+    # Todo: Could also possibly do something like R=1, RB = F1, PB=5, PBLG=F5?
+    if nums == "+" and (leftV == "O" or leftV == "AO"):
+        log.debug("funcs layer")
+        return handleFuncs(leftC, rightV, rightC)
 
-    numsResult = handleNums(stroke)
-    if numsResult is not None:
-        return numsResult
+    if nums == "+" and not leftV:
+        log.debug("nav/sym layer")
+        return handleNav(leftC, rightV, rightC)
 
-    funcsResult = handleFuncs(stroke)
-    if funcsResult is not None:
-        return funcsResult
+    if nums == "!":
+        log.debug("shortcut layer")
+        return handleShortcut(rightC, leftC + leftV + rightV)
 
     # stop if none of our handlers match
     raise KeyError
     
-
-def handleNav(stroke):
-    log.info("in handleNav")
-    navMatch = re.fullmatch(r'\+([STKPWHR]*)-(.*)', stroke)
+def parseStroke(stroke):
+    navMatch = re.fullmatch(r'([\+!]*)([STKPWHR]*)([AO]*)-?([EU]*)(.*)', stroke)
 
     if navMatch is None:
-        return None
+        raise KeyError
 
-    (mods, rest) = navMatch.groups()
+    return navMatch.groups()
 
-    if not mods and not rest:
-        return None
+def handleSingleSpace(modifiers):
+    # Just a single space by itself. Doesn't matter which vowels are used.
+    spaceVal = {"text": " ", "command": "space"}
+    log.debug("doing a space")
+    if modifiers:
+        return addMods(modifiers, leftModsMap, spaceVal)
+    else:
+        return "{^ ^}"
+
+def handleNav(modifiers, spacing, rest):
+    log.debug("in handleNav")
+    log.debug("mods: " + modifiers)
+    log.debug('spacing: ' + spacing)
+    log.debug('rest: ' + rest)
+
+    if not modifiers and not rest:
+        log.debug("not mods and not rest")
+        raise KeyError
 
     if rest and rest not in navsMap:
-        return None
-
-    log.info("found nav match")
-    modded = addMods(mods, leftModsMap, navsMap.get(rest, ""))
-    # return modded
-    return "{#" + modded + "}"
-
-def handleSymbols(stroke):
-    log.info("in handleSymbols")
-    match = re.fullmatch(r'\+([STKPWHR]*)-?([EU]*)(.*)', stroke)
-
-    if match is None:
-        return None
-
-    (mods, spacing, rest) = match.groups()
-
-    if not mods and not rest:
+        log.debug("rest and rest not in navsMap")
         raise KeyError
 
-    if rest and rest not in symbolsMap:
+    val = navsMap[rest]
+    log.debug(json.dumps(val))
+    
+    final = addSpacing(spacing, addMods(modifiers, leftModsMap, val))
+    log.debug(final)
+    return final
+    
+def handleNums(modifiers, spacing, rest):
+    if not modifiers and not rest:
+        log.debug("not mods and not rest")
         raise KeyError
 
-    if mods:
-        value = symbolsMap2.get(rest, "")
-        modded = addMods(mods, leftModsMap, value)
-        return "{#" + modded + "}"
-    else:
-        value = symbolsMap.get(rest, "")
-        spaced = addSpacing2(spacing, value)
-        return "{^" + spaced + "^}"
+    if rest and rest not in numsMap:
+        log.debug("rest and rest not in navsMap")
+        raise KeyError
+
+    val = {"text": numsMap[rest], "command": numsMap[rest]}
+    return addSpacing(spacing, addMods(modifiers, leftModsMap, val))
+
+def handleFuncs(modifiers, spacing, rest):
+    # Todo: Should spacing for funcs be removed?
+    log.debug("mods: " + modifiers)
+    log.debug('spacing: ' + spacing)
+    log.debug('rest: ' + rest)
+    
+    if not modifiers and not rest:
+        log.debug("not mods and not rest")
+        raise KeyError
+
+    if rest and rest not in funcsMap:
+        log.debug("rest and rest not in funcsMap")
+        raise KeyError
+
+    val = {"command": "F" + funcsMap[rest]}
+    return addSpacing(spacing, addMods(modifiers, leftModsMap, val))
+
+def handleShortcut(modifiers, rest):
+    if not modifiers and not rest:
+        log.debug("not mods and not rest")
+        raise KeyError
+    
+    if rest and rest not in spellingMap:
+        log.debug("rest and rest not in spellingMap")
+        raise KeyError
+
+    val = {"text": spellingMap[rest], "command": spellingMap[rest]}
+    return addSpacing("", addMods(modifiers, rightModsMap, val))
     
 
-def handleShortcut(stroke):
-    match = re.fullmatch(r'!(.*?)-?([FRPBLGTS]+)', stroke)
-
-    if match is None:
-        return None
-
-    (rest, mods) = match.groups()
-
-    if rest and rest not in spellingMap:
-        raise KeyError
-
-    modded = addMods(mods, rightModsMap, spellingMap.get(rest, ""))
-    return "{#" + modded + "}"
-
-def handleNums(stroke):
-    match = re.fullmatch(r'\+([STKPWHR]*)A([EU]*)(.*)', stroke)
-
-    if match is None:
-        return None
-
-    (mods, spacing, rest) = match.groups()
-
-    if not rest or rest not in numsMap:
-        raise KeyError
-
-    value = numsMap.get(rest, "")
-    modded = addSpacing(spacing, value) if spacing else addMods(mods, leftModsMap, value)
-    return "{#" + modded + "}"
-
-def handleFuncs(stroke):
-    match = re.fullmatch(r'\+([STKPWHR]*)O(.*)', stroke)
-
-    if match is None:
-        return None
-
-    (mods, rest) = match.groups()
-
-    if not rest or rest not in funcsMap:
-        raise KeyError
-
-    modded = addMods(mods, leftModsMap, "F" + funcsMap.get(rest, ""))
-    return "{#" + modded + "}"
-
-    return stroke
-
-def addMods(mods, map, text):
-    modNames = [map[mod] for mod in mods]
+def addMods(mods, map, val):
     addMod = lambda text, mod: mod + "(" + text + ")"
-    return reduce(addMod, modNames, text)
- 
-def addSpacing(spacing, text):
-    before = "space " if "E" in spacing else ""
-    after = " space" if "U" in spacing else ""
-    return before + text + after
 
-def addSpacing2(spacing, text):
-    before = " " if "E" in spacing else ""
-    after = " " if "U" in spacing else ""
+    text = val["command"]
+    useCommand = mods or "text" not in val
+
+    modNames = [map[mod] for mod in mods]
+    modded = reduce(addMod, modNames, text)
+
+    return "{#" + modded + "}" if useCommand else val["text"]
+
+def addSpacing(spacing, text):
+    space = "{^ ^}"
+    before = space if "E" in spacing else "{^}"
+    after = space if "U" in spacing else "{^}"
     return before + text + after
