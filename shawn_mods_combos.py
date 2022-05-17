@@ -199,7 +199,7 @@ def handleSingleSpace(modifiers):
     if modifiers:
         return addMods(modifiers, leftModsMap, spaceVal)
     else:
-        return "{^ ^}"
+        return "{^~| ^}"
 
 def handleJustMods(modifiers, map):
     return addMods(modifiers, map, {"command": ""})
@@ -279,7 +279,7 @@ def addMods(mods, map, val):
     return "{#" + modded + "}" if useCommand else val["text"]
 
 def addSpacing(spacing, text):
-    space = "{^ ^}"
-    before = space if "E" in spacing else "{^}"
-    after = space if "U" in spacing else "{^}"
+    space = "{^~| ^}"
+    before = space if "E" in spacing else "{^~|^}"
+    after = space if "U" in spacing else "{^~|^}"
     return before + text + after
