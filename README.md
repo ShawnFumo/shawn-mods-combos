@@ -9,48 +9,152 @@ I wanted something that:
 * Isn't too hard on the weaker fingers
 * Takes advantage of the layout of popular hobbyist boards
   * EcoSteno
-  * Todo: Uni support
+  * Uni
 * Doesn't need firmware modifications
 * Has some control over spacing of output
 * Compatible with Plover and Phoenix theory
-* Work with * in a way that makes sense (when possible)
+* Uses undoable inputs when possible
 * Todo: Plover's lookup window support
 * Todo: Optional modal mode
+* Todo: Make installable through plugin manager?
 
 ## Basic Concepts
 
-This system uses the number keys, and distinguishes between left and right ones (called `L#` and `R#`). The main description is for a split number bar (like on EcoSteno). Notes and a toggle for thumb # keys (like on Uni) will be coming soon.
+This system uses the number keys, and distinguishes between left and right ones (called `L#` and `R#`). This can be either a split # bar like on the EcoSteno or thumb # keys (on the outside) like on the Uni.
 
-It provides its own way to input numbers, so can fully replace the default # functionality in your theory. It probably won't be compatible with a theory using # for a different purpose (like Aerick's own theory, which uses # for proper names).
+It provides its own way to input numbers, so can fully replace the default # functionality in your theory. It probably won't be compatible with a theory using # for a different purpose (like Aerick's personal theory, which uses # for proper names).
 
-`L#` has 3 modes (with `AO` picking the mode). For each mode, the left side top row (`STPH`) is modifiers and `EU` controls output spacing.
-* `L#` by itself turns the right side into nav keys, editing keys, and basic symbol keys (except shifted number symbols).
-* `L#A` turns the first three columns of the right side into a num pad. Using shift, lets you access their associated symbols.
-* `L#O` turns the num same pad into function keys (with F10-F12 on the fourth column).
+`L#` has 3 modes. The level vowels help determine the mode. The right vowels control spacing. The modifiers are columns on the left.
+* Nav & Symbols - all the keys that aren't a letter, number, or func key. Excludes the shifted number symbols
+* Number Pad - The first three columns of the right side become a num pad (including 0). Using shift lets you access their associated symbols.
+* Function Keys - Same as the Number Pad, but with F10-F12 on the fourth column.
 
-`R#` is for using modifiers with single letters, combining the top row on the right (`-FPLT`), with finger spelling on the left.
-
-
+`R#` is for using modifiers with single letters, combining the columns on the right (`-FPLT`), with finger spelling on the left.
 
 ## Modifiers
 
-The modifiers use the # key/bar and the top row of keys on the same side. If you have a # bar, you can use it the way numbers are traditionally done, pressing both with the same finger (if doing multiple mods at once with a bar, remember you only need 1 finger hitting the bar and can use the strongest finger).
+The modifiers use the consonant keys on the same side as the # key you're pressing.
 
-|Modifier|Left |Right|
-|--------|-----|-----|
-|GUI     |`L#S`|`L#T`|
-|ALT     |`L#T`|`L#L`|
-|CTRL    |`L#P`|`L#P`|
-|SHIFT   |`L#H`|`L#F`|
+If you have a # bar, you can use it the way numbers are traditionally done, pressing both the bar and top row key with the same finger (if doing multiple mods at once, remember you only need 1 finger hitting the bar and can use the strongest finger).
+
+If using a thumb # key, it may be more comfortable to reach the modifiers on the lower row instead.
+
+|Modifier|Left #    |Right #     |
+|--------|----------|------------|
+|GUI     |`S`       |`-T` or `-S`|
+|ALT     |`T` or `K`|`-L` or `-G`|
+|CTRL    |`P` or `W`|`-P` or `-B`|
+|SHIFT   |`H` or `R`|`-F` or `-R`|
+
+__Note:__ You can use a modifier my itself from either side. For instance, to bring up the start menu on Windows, you could use `L#S` or `R#-T` or `R#-S` to press the GUI/Windows button.
+
+## Spacing
+By default, all symbols and numbers will suppress any spacing (like outputting an equal sign on the nav/symbols mode would output `{^=^}`). Using the right vowels will force a space on that side.
+
+|Vowel|Output|
+|-----|------|
+|     |`^=^` |
+|E    |`⎵=^` |
+|U    |`^=⎵` |
+|EU   |`⎵=⎵` |
+
+This works with modifiers and even navigation keys as well. Spacing makes the most sense with shifted symbols, but otherwise it will still happen in order. `EU` with control-left would output a space, do control-left, and output another space.
+
+__Note:__ In any mode using `L#`, pressing any of the right vowels and no right-side consonants will output a single space. This lets you add a space without outputting any symbols, but more importantly lets you use modifiers to do things like ctrl-space.
 
 ## Navigation and Symbols
-...
+
+This mode is for the common keys that aren't letters, numbers, or function keys. 
+
+|Input |Key   |Notes|
+|---|---|---|
+|||__Inverted T layout__|
+|`-P`|Up||
+|`-R`|Left||
+|`-B`|Down||
+|`-G`|Right||
+|||__Other Nav__|
+|`-RPG`|Page Up|Arrow pointed up|
+|`-FBL`| Page Down|Arrow pointed down|
+|`-FPL`|Home||
+|`-RBG`|End||
+|||__Editing__|
+|`-F`|Backspace|Deletes to left|
+|`-L`|Delete|Deletes to right|
+|`-PBS`|Insert|Sounds like `NS`
+|`-RB`|Enter|Down-left, like the motion of a new line. Undoable when not used with modifiers|
+|`-FR`|Escape||
+|`-LG`|Tab|Undoable when not used with modifiers
+|||__Diagonal Shapes__|
+|`-RP`|/|up-right|
+|`-FB`|\ |down-right|
+|`-BL`|'|up-right|
+|`-PG`|`|down-right|
+|||__Horizontal Lines__|
+|`-BG`|-|Lower
+|`-PL`|=|Higher
+|||__Punctuation__|
+|`‑FPLT`|.|Most theories have period on top|
+|`‑RBGS`|,|Most theories have common on bottom|
+|`-PB`|;|Vertical line shape|
+|||__Other__|
+|`-RPL`|[||
+|`-FPG`|]||
+|`-PS`|Print Screen| Initials `PS`
 
 ## Numbers
-...
+Numbers are accessed by using `L#A`.
+
+It is laid out like a numbers pad on the right, using the first three columns and using vertical combos for the middle row. `-R`  for `1`, `-PB` for `5` and `-L` for `9`.
+
+`0` is `-RB` or `-T`. `-T` makes it easier to do `()` by putting `0` next to `9`.
+
+You can get to all the symbols on number keys by using the shift modifier `P` or `R`.
 
 ## Function Keys
-...
+There is two ways to access function keys. With a top # bar, you can use `L#O`. You can technically use `L#AO` for a thumb # key, but this is usually hard to press. Instead, you can use the number pad of `L#A` along with `-Z`. 
+
+It is laid out the same as the number pad but also uses the fourth row to give `F10` through `F12` via `-S`, `-TS`, and `-T`.
+
+## Examples
+|Stroke|Output|Notes
+|---|---|---
+L#P|Up|simple navigation
+L#AEUL|⎵9⎵|number w/ leading & ending space
+L#REPL|⎵+|shifted symbol w/ leading space
+R#KR-B|Ctrl-C|Shortcut w/ modifier
+L#PAOPB|Ctrl-F5|Func key w/ modifier
+L#AGZ|F3|Func key using num pad + Z (for thumb # users or preference)
+
+## Installation
+You need to install [Python Dictionary support](https://github.com/benoit-pierre/plover_python_dictionary) to use this dictionary.
+
+You also need to change the default available keys so that the left and right # can be distinguished, and then map them to the corresponding Gemini codes from your keyboard. 
+
+The [StenoType Extended plugin](https://github.com/sammdot/plover-stenotype-extended) adds `^` and `+` to `#`, but I felt `^` is confusing (looks like the attach operator) and didn't want to deal with stuff falling through into old `#` in other dicts.
+
+So I removed `#` and added `+` for the left number key and `!` for the right number key.
+
+If you're using Plover theory, you can install the Extended plugin above and modify the `extended_stenotype.py` and change the top row so it looks like this:
+```
+KEYS = (
+  '#', '^-', '+-',
+  'S-', 'T-', 'K-', 'P-', 'W-', 'H-', 'R-',
+  'A-', 'O-',
+  '*',
+  '-E', '-U',
+  '-F', '-R', '-P', '-B', '-L', '-G', '-T', '-S', '-D', '-Z',
+)
+```
+
+If you're using the Phoenix add-on, edit `plover_phoenix_stenotype.py` and add the above code anywhere in it.
+
+__EcoSteno__ -
+The number bar buttons in the EcoSteno send out `#2` and `#4` for the left side, so set them to `+-`. The right side are `#8` and `#A`, so set them to `!-`.
+
+__Uni__ - 
+Set `#1` to `+-` and `#2` to `!-`
+
 
 ## Inspirations
 
