@@ -19,14 +19,14 @@ I wanted something that:
 
 This system uses the number keys, and distinguishes between left and right ones (called `L#` and `R#`). This can be either a split # bar like on the EcoSteno or thumb # keys (on the outside) like on the Uni.
 
-It provides its own way to input numbers, so can fully replace the default # functionality in your theory. It probably won't be compatible with a theory using # for a different purpose (like Aerick's personal theory, which uses # for proper names).
+It provides its own way to input numbers, so can fully replace the default # functionality in your theory. If you want to use it with a theory already using # for special purposes (like [Aerick's theory](https://github.com/aerickt/steno-dictionaries)), the normal # would need its own key like Top S.
 
 `L#` has 3 modes. The level vowels help determine the mode. The right vowels control spacing. The modifiers are columns on the left.
-* Nav & Symbols - all the keys that aren't a letter, number, or func key. Excludes the shifted number symbols
-* Number Pad - The first three columns of the right side become a num pad (including 0). Using shift lets you access their associated symbols.
+* Nav & Symbols - all the keys that aren't a letter, number, or func key. Excludes the shifted number symbols.
+* Number Pad - The first three columns of the right side become a num pad (along with two ways to write 0). Using shift lets you access their associated symbols.
 * Function Keys - Same as the Number Pad, but with F10-F12 on the fourth column.
 
-`R#` is for using modifiers with single letters, combining the columns on the right (`-FPLT`), with finger spelling on the left.
+`R#` is for using modifiers with single letters, combining the columns on the right (`-FPLT`), with finger spelling on the left. It can also fully replace normal fingerspelling if you want.
 
 ## Modifiers
 
@@ -173,7 +173,7 @@ Set `#1` to `+-` and `#2` to `!-`
 
 
 ### Todo
-
+* Add pics or video to this readme
 * Plover lookup window support
 * Optional modal mode
 * Make installable through plugin manager?
