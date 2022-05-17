@@ -60,9 +60,9 @@ navsMap = {
     "RBG": {"command": "end"},
 
     "FR": {"command": "escape"},
-    "LG": {"command": "tab", "text": "\t"},
+    "LG": {"command": "tab", "text": "{^~|\t^}"},
 
-    "RB": {"command": "return", "text": "\n"}, # Does Plover care about \n vs \r?
+    "RB": {"command": "return", "text": "{^~|\n^}"}, # Does Plover care about \n vs \r?
 
     "RP": {"text": "/", "command": "slash"},
     # Spaces around \ needed for escaping problem with that and {^}. They aren't printed.
