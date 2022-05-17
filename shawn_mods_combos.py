@@ -20,7 +20,8 @@ spellingMap = {
     "TP"    : "f",
     "TKPW"  : "g",
     "H"     : "h",
-    "AOEU"  : "i",
+    "AOEU"  : "i", # Phoenix
+    "EO"    : "i", # Plover
     "AOU"   : "i", # for thumb cluster # keys on outside
     "SKWR"  : "j",
     "K"     : "k",
@@ -38,7 +39,8 @@ spellingMap = {
     "W"     : "w",
     "KP"    : "x",
     "KWR"   : "y",
-    "SWR"   : "z",
+    "SWR"   : "z", # Phoenix
+    "STKPW" : "z", # Plover
 }
 
 navsMap = {
