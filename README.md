@@ -46,13 +46,15 @@ The modifiers use the consonant keys on the same side as the # key you're pressi
 
 If you have a # bar, you can use it the way numbers are traditionally done, pressing both the bar and top row key with the same finger (if doing multiple mods at once, remember you only need 1 finger hitting the bar and can use the strongest finger).
 
-<img src="pics/EcoSteno-mods-left.PNG" width="75%" /><br />
+<img src="pics/EcoSteno-mods-left.PNG" width="75%" />
+<hr width="75%" align="left">
 <img src="pics/EcoSteno-mods-right.PNG" width="75%" /><br />
 
 If using a thumb # key, it may be more comfortable to reach the modifiers on the lower row instead.
 
-<img src="pics/Uni-mods-left.PNG" width="75%" /><br />
-<img src="pics/Uni-mods-right.PNG" width="75%" /><br />
+<img src="pics/Uni-mods-left.PNG" width="75%" />
+<hr width="75%" align="left">
+<img src="pics/Uni-mods-right.PNG" width="75%" /><br/><br/>
 
 |Modifier|Left #    |Right #     |
 |--------|----------|------------|
@@ -91,7 +93,8 @@ The direction arrows are an inverted T<br />
 
 Example: Shift End<br />
 <img src="pics/EcoSteno-shift-end.PNG" width="50%" />
-<img src="pics/Uni-shift-end.PNG" width="50%" /><br />
+<hr width="50%" align="left">
+<img src="pics/Uni-shift-end.PNG" width="50%" /><br /><br />
 
 
 |Input |Key   |Notes|
@@ -151,8 +154,9 @@ There is two ways to access function keys. With a top # bar, you can use `L#O`. 
 It is laid out the same as the number pad but also uses the fourth row to give `F10` through `F12` via `-S`, `-TS`, and `-T`.
 
 Example: F5<br />
-<img src="pics/EcoSteno-F5.PNG" width="50%" /><br />
-<img src="pics/Uni-F5.PNG" width="50%" />
+<img src="pics/EcoSteno-F5.PNG" width="50%" />
+<hr width="50%" align="left">
+<img src="pics/Uni-F5.PNG" width="50%" /><br /><br />
 
 
 ## Shortcuts and Fingerspelling 
