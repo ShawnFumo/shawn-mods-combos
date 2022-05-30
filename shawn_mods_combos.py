@@ -60,7 +60,9 @@ navsMap = {
     "RBG": {"command": "end"},
 
     "FR": {"command": "escape"},
-    "LG": {"command": "tab", "text": "{^~|\t^}"},
+    # Can't use \t in the Plover Add Translation dialog
+    # "LG": {"command": "tab", "text": "{^~|\t^}"},
+    "LG": {"command": "tab"},
 
     "RB": {"command": "return", "text": "{^~|\n^}"}, # Does Plover care about \n vs \r?
 
@@ -71,8 +73,10 @@ navsMap = {
     "RBGS": {"text": ",", "command": "comma"},
     "FPLT": {"text": ".", "command": "period"},
 
-    "BL": {"text": "'", "command": "apostrophe"},
-    "PG": {"text": "`", "command": "grave"},
+    # Needed to use this instead of: apostrophe 
+    "BL": {"text": "'", "command": "quoteright"},
+    # Needed to use this intead of: grave
+    "PG": {"text": "`", "command": "quoteleft"},
 
     "PB": {"text": ";", "command": "semicolon"},
 
