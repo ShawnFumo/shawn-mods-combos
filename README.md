@@ -42,12 +42,17 @@ It provides its own way to input numbers, so can fully replace the default # fun
 
 
 ## Modifiers
-
 The modifiers use the consonant keys on the same side as the # key you're pressing.
 
 If you have a # bar, you can use it the way numbers are traditionally done, pressing both the bar and top row key with the same finger (if doing multiple mods at once, remember you only need 1 finger hitting the bar and can use the strongest finger).
 
+<img src="pics/EcoSteno-mods-left.PNG" width="75%" /><br />
+<img src="pics/EcoSteno-mods-right.PNG" width="75%" /><br />
+
 If using a thumb # key, it may be more comfortable to reach the modifiers on the lower row instead.
+
+<img src="pics/Uni-mods-left.PNG" width="75%" /><br />
+<img src="pics/Uni-mods-right.PNG" width="75%" /><br />
 
 |Modifier|Left #    |Right #     |
 |--------|----------|------------|
@@ -69,6 +74,9 @@ By default, all symbols and numbers will suppress any spacing. Outputting an equ
 |U    |`^=⎵` |
 |EU   |`⎵=⎵` |
 
+Example: Slash with a space before it<br />
+<img src="pics/EcoSteno-space-slash.PNG" width="50%" /><br />
+
 This works with modifiers and even navigation keys as well. Spacing with mods makes the most sense with shifted symbols, but otherwise it will still output everything in order. `EU` with `CTRL-Left` would output a space, do control+left, and output another space.
 
 > __Note:__ In any mode using `L#`, pressing any of the right vowels and no right-side consonants will output a single space. This lets you add a space without outputting any symbols, but more importantly lets you use modifiers to do things like ctrl-space.
@@ -77,6 +85,14 @@ This works with modifiers and even navigation keys as well. Spacing with mods ma
 ## Navigation and Symbols
 
 This mode is for the common keys that aren't letters, numbers, or function keys. 
+
+The direction arrows are an inverted T<br />
+<img src="pics/EcoSteno-inverted-t-arrows.PNG" width="50%" /><br />
+
+Example: Shift End<br />
+<img src="pics/EcoSteno-shift-end.PNG" width="50%" />
+<img src="pics/Uni-shift-end.PNG" width="50%" /><br />
+
 
 |Input |Key   |Notes|
 |---|---|---|
@@ -124,11 +140,19 @@ It is laid out like a number pad on the right, using the first three columns and
 
 You can get to all the symbols on number keys by using the shift modifier `P` or `R`.
 
+Example: 7 (with space before and after)<br />
+<img src="pics/Uni-space-7-space.PNG" width="50%" /><br />
+Example: % (shift-5)<br />
+<img src="pics/EcoSteno-percent.PNG" width="50%" />
 
 ## Function Keys
 There is two ways to access function keys. With a top # bar, you can use `L#O`. You can technically use `L#AO` for a thumb # key, but this is usually hard to press. Instead, you can use the number pad of `L#A` along with `-Z`. 
 
 It is laid out the same as the number pad but also uses the fourth row to give `F10` through `F12` via `-S`, `-TS`, and `-T`.
+
+Example: F5<br />
+<img src="pics/EcoSteno-F5.PNG" width="50%" /><br />
+<img src="pics/Uni-F5.PNG" width="50%" />
 
 
 ## Shortcuts and Fingerspelling 
@@ -136,22 +160,16 @@ To do shortcuts involving letter keys, you can use `R#`, the modifiers on the ri
 
 These are the standard fingerspelling combos like `KR` for `c` and `SKWR` for `j`. For `z`, you can use either Plover's `STKPW` or Phoenix's `SWR`. `i` can be Plover's `EU` or Pheonix's `AOEU`.
 
+Example: Ctrl-C<br />
+<img src="pics/EcoSteno-ctrl-c.PNG" width="50%" /><br />
+Example: Ctrl-Z<br />
+<img src="pics/Uni-ctrl-z.PNG" width="50%" />
+
 > __Note:__ When using a thumb cluster # key like on the Uni, you probably can't easily press `E` or `EU` with `R#`. You can use these variations to help: `AU` for `e` and `AOU` for `i`.
 
 You can also use this as an alternative way to do finger spelling by using no modifiers for lowercase letters and `-P` or `-R` to shift to capitals. You could free up your normal fingerspelling strokes for something else if you wanted.
 
 You can't add spacing via `EU` due to being needed for fingerspelling vowels, but remember you can use `L#` and any right vowel to quickly [add a space](#spacing) (or your theory's normal space stroke).
-
-
-## Examples
-When showing two different strokes, first is for a board with a top # bar, and second for a thumb # key.
-|Stroke|Output|Notes
-|---|---|---
-`L#P`|`Up`|basic navigation (one key per hand!)
-`L#AEUL`|`⎵9⎵`|number w/ leading & ending space
-`L#REPL`<br>or<br>`L#REWL`|`⎵+`|shifted symbol w/ leading space
-`R#KR-P`<br>or<br>`R#KR-B`|`Ctrl-C`|Shortcut w/ modifier
-`L#POPB`<br>or<br>`L#WAPBZ`|`Ctrl-F5`|Func key w/ modifier
 
 
 ## Installation
