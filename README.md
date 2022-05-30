@@ -15,6 +15,13 @@ I wanted something that:
 * Compatible with [Plover theory](https://github.com/openstenoproject/plover/wiki/Learning-Stenography) and [Phoenix theory](https://www.chicorymeadow.com/)
 * Uses undoable inputs when possible
 
+## Demonstration
+<a href="https://www.youtube.com/watch?v=XMFucXkGYqg" title="Shawn's Mods & Combos for Plover">
+  <p>
+    <img width="75%" src="https://img.youtube.com/vi/XMFucXkGYqg/maxresdefault.jpg" alt="Video thumbnail"/>
+    <br />https://www.youtube.com/watch?v=XMFucXkGYqg
+  </p>
+</a>
 
 ## Basic Concepts
 
